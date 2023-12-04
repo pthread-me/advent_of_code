@@ -103,7 +103,7 @@ void handle_astrik(int line_index, int char_index, char** matrix, int line_lengt
 
 	//checks same row
 	if(char_index-1>-1 && isdigit(matrix[line_index][char_index-1])){
-			current = get_number(line_index, char_index-1, matrix, line_length);
+		  	current = get_number(line_index, char_index-1, matrix, line_length);
 			if(add_uniques(current, uniques, array_counter)){
 				array_counter++;
 			}			
@@ -121,55 +121,6 @@ void handle_astrik(int line_index, int char_index, char** matrix, int line_lengt
 		sum += uniques[0]*uniques[1];
 	}
 }
-
-
-bool is_symbol(char c){
-	return (isdigit(c)==0 && c!='.');
-}
-
-bool check_surroundings(int line_number, int first, int last, char** matrix, int line_length){
-	for(int i= first; i<last+1; i++){
-		
-		//checks line above
-		if(line_number-1 > -1){
-			if(i-1 > -1 && is_symbol(matrix[line_number-1][i-1])){
-				return true;
-			}
-			if(i+1 < line_length && is_symbol(matrix[line_number-1][i+1])){
-				return true;
-			}
-			if(is_symbol(matrix[line_number-1][i])){
-				return true;
-			}
-		}
-
-		//check line bellow
-		if(line_number+1 < LINES){
-			if(i-1 > -1 && is_symbol(matrix[line_number+1][i-1])){
-				return true;
-			}
-			if(i+1 < line_length && is_symbol(matrix[line_number+1][i+1])){
-				return true;
-			}
-			if(is_symbol(matrix[line_number+1][i])){
-				return true;
-			}
-		}
-
-		//check same line
-		if(i-1 > -1 && is_symbol(matrix[line_number][i-1])){
-			return true;
-		}
-		if(i+1 < line_length && is_symbol(matrix[line_number][i+1])){
-			return true;
-		}
-		if(is_symbol(matrix[line_number][i])){
-			return true;
-		}
-	}
-	return false;
-}
-
 
 int main(){
 
@@ -195,7 +146,7 @@ int main(){
 		//getline reads \n so to offset this we replace it with a . which is considered NULL in this use case
 		matrix[i][chars_read-1] = '.';
 	}
-
+/*
 	for(int i=0; i<LINES; i++){
 		for(int j=0; j<chars_read; j++){
 			if(isdigit(matrix[i][j])>0 && first<0){
@@ -222,7 +173,7 @@ int main(){
 	}
 
 
-
+*/
 	//part2, we now make a second sweep and find multiplications (subtracting the values which will be multipled ofc)
 	for(int i=0; i<LINES; i++){
 		for(int j=0; j<chars_read; j++){
