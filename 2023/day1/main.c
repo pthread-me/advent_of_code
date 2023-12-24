@@ -1,13 +1,7 @@
 //
 // Created by anasn on 2023-12-01.
 //
-#define _GNU_SOURCE
-#include "main.h"
-#include "stdlib.h"
-#include <stdio.h>
-#include <ctype.h>
-#include <stdbool.h>
-#include <string.h>
+#include "../lib/main.h"
 int main(int argc, char** argv){
 
     char* line;
@@ -23,7 +17,6 @@ int main(int argc, char** argv){
 	bool first_filled = false;
 	bool last_filled = false;
 	int sum =0;
-
 	while( (chars_read = getline(&line, &line_size, input) -1) >0){
 		for(int i=0; i<chars_read; i++){
 
@@ -161,5 +154,5 @@ int main(int argc, char** argv){
 	}	
 
 
-	fprintf(output, "%d\n", sum);		
+	printf("%d\n", sum);		
 }

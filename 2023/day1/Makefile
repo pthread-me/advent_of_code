@@ -1,4 +1,4 @@
 compiler = gcc --std=c18
 
-main: main.c main.h
+main: main.c 
 	$(compiler) main.c -g -o main
