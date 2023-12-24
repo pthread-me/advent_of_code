@@ -93,18 +93,14 @@ int get_type(int* array){
 
 void lhash(char* letters, int* array){
 	
-
 	for(int i=0; letters[i] != '\0'; i++){
 		char curr = letters[i];
 	
 		if(isdigit(curr)){
 			int index = curr - '0';
 			array[index] ++;
-			continue;
 		}
 		
-
-
 		switch(curr){
 			case 'A':
 				array[A] ++;
@@ -123,35 +119,6 @@ void lhash(char* letters, int* array){
 				break;
 	
 		}
-	}
-
-	int highest_char= A;
-	int highest_count =array[14];
-
-	for(int i=14; i>0; i--){
-		if(array[i] > highest_count){
-			highest_char = i;
-			highest_count = array[i];
-		}
-
-	}
-
-	int second = 0;
-	int second_count = 0;
-	for(int i=14; i>0; i--){
-		if(array[i] > second_count && i != highest_char){
-			second = i;
-			second_count = array[i];
-		}
-
-	}
-
-	if(highest_char == J && second_count+highest_count > highest_count){
-		array[second] += array[highest_char];
-		array[highest_char]=0;
-	}else if(highest_char != J){
-		array[highest_char] += array[J];
-		array[J] = 0;
 	}
 	
 }

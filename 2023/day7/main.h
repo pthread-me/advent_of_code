@@ -3,7 +3,7 @@ enum{
 	A = 14,
 	K = 13,
 	Q = 12,
-	J = 11,
+	J = 1,
 	T = 10,
 	five_kind = 6,
 	four_kind = 5,
