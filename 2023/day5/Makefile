@@ -1,5 +1,5 @@
 compiler=gcc --std=c18
 flags= -g -o
 
-main: main.c
-	$(compiler) main.c $(flags) main -lm
+main: part1.c
+	$(compiler) part1.c $(flags) main -lm
