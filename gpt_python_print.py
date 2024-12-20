@@ -3,68 +3,82 @@
 import os
 import subprocess
 import time
+import re
 
 def run_programs(base_path):
-    results = []
+    results = {}
     
-    for day in os.listdir(base_path):
+    for day in sorted(os.listdir(base_path), key=lambda x: int(re.match(r'day(\d+)', x).group(1)) if re.match(r'day(\d+)', x) else float('inf')):
         day_path = os.path.join(base_path, day)
         if os.path.isdir(day_path):
             part1_path = os.path.join(day_path, "build", "part1")
             part2_path = os.path.join(day_path, "build", "part2")
             
-            if os.path.isfile(part1_path) and os.path.isfile(part2_path):
+            day_results = []
+
+            # Check if part1 exists and run it
+            if os.path.isfile(part1_path):
                 part1_times = []
-                part2_times = []
                 
-                # Run part1 10 times
                 for _ in range(10):
                     start_time = time.perf_counter()
                     subprocess.run([part1_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                     elapsed_time = time.perf_counter() - start_time
                     part1_times.append(elapsed_time)
                 
-                # Run part2 10 times
+                part1_slowest = max(part1_times)
+                part1_fastest = min(part1_times)
+                part1_average = sum(part1_times) / len(part1_times)
+                
+                day_results.append(('Part 1', part1_fastest, part1_slowest, part1_average))
+            
+            # Check if part2 exists and run it
+            if os.path.isfile(part2_path):
+                part2_times = []
+                
                 for _ in range(10):
                     start_time = time.perf_counter()
                     subprocess.run([part2_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                     elapsed_time = time.perf_counter() - start_time
                     part2_times.append(elapsed_time)
                 
-                # Calculate statistics
-                part1_slowest = max(part1_times)
-                part1_fastest = min(part1_times)
-                part1_average = sum(part1_times) / len(part1_times)
-                
                 part2_slowest = max(part2_times)
                 part2_fastest = min(part2_times)
                 part2_average = sum(part2_times) / len(part2_times)
                 
-                results.append((day, part1_fastest, part1_slowest, part1_average, part2_fastest, part2_slowest, part2_average))
+                day_results.append(('Part 2', part2_fastest, part2_slowest, part2_average))
+
+            if day_results:
+                results[day] = day_results
     
     return results
 
-def generate_makefile_table(results):
-    table = [
-        "| Day | Part 1 Fastest (s) | Part 1 Slowest (s) | Part 1 Average (s) | Part 2 Fastest (s) | Part 2 Slowest (s) | Part 2 Average (s) |",
-        "| --- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ | ------------------ |"
-    ]
+def generate_markdown_tables(results):
+    tables = []
     
-    for day, part1_fastest, part1_slowest, part1_average, part2_fastest, part2_slowest, part2_average in results:
-        table.append(f"| {day} | {part1_fastest:.6f} | {part1_slowest:.6f} | {part1_average:.6f} | {part2_fastest:.6f} | {part2_slowest:.6f} | {part2_average:.6f} |")
+    for day, data in results.items():
+        table = [
+            f"## {day}",
+            "| Part | Fastest (s) | Slowest (s) | Average (s) |",
+            "| ---- | ------------ | ------------ | ------------ |"
+        ]
+        for part, fastest, slowest, average in data:
+            table.append(f"| {part} | {fastest:.6f} | {slowest:.6f} | {average:.6f} |")
+        
+        tables.append("\n".join(table))
     
-    return "\n".join(table)
+    return "\n\n".join(tables)
 
-def write_to_readme(base_path, table):
-    with open(f'{base_path}/README.md', "w") as file:
+def write_to_readme(content):
+    with open("README.md", "w") as file:
         file.write("# Program Outputs\n")
         file.write("## Execution times for part1 and part2 programs\n\n")
-        file.write(table)
+        file.write(content)
 
 if __name__ == "__main__":
     base_path = "2024"
     results = run_programs(base_path)
-    makefile_table = generate_makefile_table(results)
-    write_to_readme(base_path, makefile_table)
+    markdown_tables = generate_markdown_tables(results)
+    write_to_readme(markdown_tables)
     print("Output written to README.md")
 

@@ -33,39 +33,43 @@ void* count_valid(void* args){
 	for(size_t i = data->start; i<= data->end; i++){
 		vector<int> row = data->matrix->at(i);
 		bool valid_row = true;
-		int size_violation = 0;
-		int direction_change = 0;
-		int direction =0; 
+		int violation_count = 0;
+		vector<int> inc;
+		vector<int> dec;
+		vector<int> eq;
+		int directions;
 
-		for(size_t j =0; j<row.size()-1; j++){
-			if(size_violation>1 || direction_change>2){
+		inc.push_back(row.at(0));
+		dec.push_back(row.at(0));
+		eq.push_back(row.at(0));
+		
+		for(size_t j =1; j<row.size()-1; j++){
+			if(violation_count>1){
 				valid_row = false;
 				break;
 			}
-			if(row.at(j) - row.at(j+1) > abs(3)){
-				size_violation ++;
+
+			if(row.at(j-1) - row.at(j) > abs(3)){
+				violation_count ++;
 			}
 
-			if(row.at(j) < row.at(j+1) ){
-				if(direction>0){
-					continue;
-				}else{
-					direction_change++;
-					direction++;
-				}
-
-			}else if(row.at(j) > row.at(j+1) ){
-				if(direction< 0){
-					continue;
-				}else{
-					direction_change++;
-					direction--;
-				}
+			if(row.at(j-1) < row.at(j)){
+				inc.push_back(j);
+			}else if(row.at(j-1) > row.at(j)){
+				dec.push_back(j);
 			}else{
-				direction_change++;
+				eq.push_back(j);
 			}
-
 		}
+
+	directions = (inc.size()>1) + (dec.size()>1) + (eq.size()>1);
+	if(directions ==3){
+		valid_row = false;
+	}else if (directions == 2) {
+		
+	}
+
+
 
 	if(valid_row) valid_count++;
 		rows_counted++;	
