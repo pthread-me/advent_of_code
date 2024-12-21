@@ -70,7 +70,7 @@ def generate_markdown_tables(results):
     return "\n\n".join(tables)
 
 def write_to_readme(content):
-    with open("README.md", "w") as file:
+    with open(f"{base_path}/README.md", "w") as file:
         file.write("# Program Outputs\n")
         file.write("## Execution times for part1 and part2 programs\n\n")
         file.write(content)

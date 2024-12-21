@@ -11,9 +11,9 @@
 #include <pthread.h>
 #include <vector>
 
+const size_t thread_num = 16;
 
 int shared_count =0;
-int total_rows =0;
 std::mutex mutex_lock;
 
 typedef struct thread_data{
@@ -22,62 +22,46 @@ typedef struct thread_data{
 	size_t end;
 }Pdata;
 
+bool check_row(std::vector<int> row, bool increasing, bool chance){
+	for(size_t i=0; i<row.size()-1; i++){
+		if((increasing && row.at(i) >= row.at(i+1)) ||(!increasing && row.at(i) <= row.at(i+1)) || (abs(row.at(i) - row.at(i+1)) > 3)){
+			
+			if(!chance) {
+				return false;
+			}	
+			std::vector<int> row1 = row, row2 =row;
+			row1.erase(row1.begin() + i);
+			row2.erase(row2.begin() + i+1);
+			return check_row(row1, increasing,false) || check_row(row2, increasing, false);
+		}
+	}
+	return true;
+}
+
 void* count_valid(void* args){
 	using namespace std;
 
 	Pdata* data = static_cast<Pdata*>(args);
-
 	int valid_count =0;
-	int rows_counted =0;
 
 	for(size_t i = data->start; i<= data->end; i++){
 		vector<int> row = data->matrix->at(i);
-		bool valid_row = true;
-		int violation_count = 0;
-		vector<int> inc;
-		vector<int> dec;
-		vector<int> eq;
-		int directions;
-
-		inc.push_back(row.at(0));
-		dec.push_back(row.at(0));
-		eq.push_back(row.at(0));
 		
-		for(size_t j =1; j<row.size()-1; j++){
-			if(violation_count>1){
-				valid_row = false;
+		//check row direction
+		bool increasing = false;
+		for(size_t window =0; window<3; window++){
+			if(row.at(window) < row.at(window+1) && row.at(window+1) < row.at(window+2)){
+				increasing = true;
 				break;
-			}
-
-			if(row.at(j-1) - row.at(j) > abs(3)){
-				violation_count ++;
-			}
-
-			if(row.at(j-1) < row.at(j)){
-				inc.push_back(j);
-			}else if(row.at(j-1) > row.at(j)){
-				dec.push_back(j);
-			}else{
-				eq.push_back(j);
 			}
 		}
 
-	directions = (inc.size()>1) + (dec.size()>1) + (eq.size()>1);
-	if(directions ==3){
-		valid_row = false;
-	}else if (directions == 2) {
-		
+		if(check_row(row, increasing, true)) valid_count++;
 	}
-
-
-
-	if(valid_row) valid_count++;
-		rows_counted++;	
-	}	
+	
 
 	mutex_lock.lock();
 	shared_count += valid_count;
-	total_rows += rows_counted;
 	mutex_lock.unlock();
 
 	return nullptr;	
@@ -105,31 +89,39 @@ int main(){
 		matrix->push_back(row);
 	}
 
-	pthread_t threads[16];
-	Pdata data[16];
+
+	
+	pthread_t threads[thread_num];
+	Pdata data[thread_num];
 	size_t matrix_size = matrix->size();
-	size_t block_size = ceil(matrix->size()/16.0);
+	size_t block_size = ceil(matrix->size() / 16.0);
 
 
-	for(size_t i=0, j=0; i<matrix_size && j<16; i+=block_size+1, j++){
+	for(size_t i=0, j=0; i<matrix_size && j<thread_num; i+=block_size, j++){
 		data[j].matrix = matrix;
 		data[j].start = i;
-		data[j].end = i+block_size;
+		data[j].end = i+block_size-1;
 			
 		if(i+block_size-1 > matrix_size){
 			data[j].end = matrix_size-1;
 		}
 	}
 
-	for(int i=0; i<16; i++){
+	for(int i=0; i<thread_num; i++){
 		pthread_create(&threads[i], nullptr, count_valid, &data[i]);
 	}
 
 	
-	for(int i=0; i<16; i++){
+	for(int i=0; i<thread_num; i++){
 		pthread_join(threads[i], nullptr);
 	}
 
+	/*
+	Pdata data;
+	data.matrix = matrix;
+	data.start =0;
+	data.end = matrix->size();
+*/
+	
 	cout << shared_count << endl ;
-	cout << total_rows << flush;
 }
