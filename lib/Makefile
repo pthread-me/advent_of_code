@@ -4,7 +4,7 @@ MATH= -lm
 BUILD_DIR = build
 SRC_DIR = .
 
-SRC_FILES = tokenizer.cpp
+SRC_FILES = tokenizer.cpp 
 OBJS = $(BUILD_DIR)/$(SRC_FILES:.cpp=.o)
 
 all: $(OBJS)
