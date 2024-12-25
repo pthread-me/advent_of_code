@@ -5,12 +5,11 @@
 #include <utility>
 #include <vector>
 #include <string>
-#include <cmath>
 
 //preprocessed data
-#define COLUMNS  10// 131
-#define ROWS 10// 130
-#define INPUT "test.txt"
+#define COLUMNS  131
+#define ROWS 130
+#define INPUT "input.txt"
 //end of preprocessed data
 
 typedef struct Cursor{
@@ -147,24 +146,17 @@ void add_visited(Cursor& cursor, std::pair<int, int> barrier_pos){
 	}
 }
 
-
-typedef struct hit_info{
-	std::pair<int, int> barrier;
-	char cursor_dir;
-
-	friend bool operator==(hit_info a, hit_info b){
-		return a.barrier == b.barrier && a.cursor_dir == b.cursor_dir;
-	}
-}hit_info;
-
-
 int main(){
 	using namespace std;
 
-	Cursor init_cursor_pos = read_input();
-	Cursor cursor = init_cursor_pos;
+	Cursor initial_cursor = read_input();
+	Cursor cursor = initial_cursor;
+	Cursor check_point_cursor = initial_cursor;
 
 	pair<int, int> barrier_pos;
+	pair<int, int> initial_bar = find_barrier(initial_cursor);
+	int barrier_hit;
+
 	visited.push_back(pair(cursor.i, cursor.j));
 
 	//finding the path taken
@@ -185,52 +177,51 @@ int main(){
 	auto new_end = unique(visited.begin(), visited.end());
 	visited.erase(new_end, visited.end());
 
+	int loops = 0;
 
-	int loop =0;
+	for(int i=1; i<visited.size(); i++){
 
-	for(int i=0; i<visited.size(); i++){
-	
-		vector<hit_info> hits;
+		if(i==19){
+			cout << "hi";
+		}
 
-		pair<int, int> bar = visited.at(i);
-		vector<int> bar_hits(4);
-		cursor = init_cursor_pos;
-		
+		pair<int, int> barrier = visited.at(i); 
+		cursor = initial_cursor;
+		barrier_hit =0;
+
 		//adding new barrier
-		rows.at(bar.first).push_back(bar.second);
-		columns.at(bar.second).push_back(bar.first);
-		sort(rows.at(bar.first).begin(), rows.at(bar.first).end());
-		sort(columns.at(bar.second).begin(), columns.at(bar.second).end());
+		rows.at(barrier.first).push_back(barrier.second);
+		columns.at(barrier.second).push_back(barrier.first);
 
-		
+		sort(rows.at(barrier.first).begin(), rows.at(barrier.first).end());
+		sort(columns.at(barrier.second).begin(), columns.at(barrier.second).end());
+	
 
-		//finding the path taken
-		while(true){
+		for(int j=0; j<120; j++){
 			barrier_pos = find_barrier(cursor);
-			hit_info hit;
-			hit.barrier = barrier_pos;
-			hit.cursor_dir = cursor.c;
-
-			if(find(hits.begin(), hits.end(), hit) != hits.end()){
-				loop++;
-				break;
-			}else{
-				hits.push_back(hit);
-			}
-			
-			if(barrier_pos.first == -1 || barrier_pos.first == ROWS || barrier_pos.second == -1 || barrier_pos.second == COLUMNS){
-				break;
+			if(barrier_pos.first == barrier.first && barrier_pos.second == barrier.second){
+				barrier_hit++;
 			}
 
 			move_cusor(cursor, barrier_pos);
 			cursor.c = rotate(cursor.c);
+
+			if(barrier_pos.first == -1 || barrier_pos.first == ROWS || barrier_pos.second == -1 || barrier_pos.second == COLUMNS){
+				break;
+			}
+
+			if(j>0 && barrier_hit>10) {
+				loops++;
+				break;
+			}
+			if(i==19){
+				cout << j << endl;
+			}
 		}
-		//removing added barrier
-		rows.at(bar.first).erase(find(rows.at(bar.first).begin(), rows.at(bar.first).end(), bar.second));
-		columns.at(bar.second).erase(find(columns.at(bar.second).begin(), columns.at(bar.second).end(), bar.first));
+		cout << i << endl;
+		rows.at(barrier.first).erase(find(rows.at(barrier.first).begin(), rows.at(barrier.first).end(), barrier.second));
+		columns.at(barrier.second).erase(find(columns.at(barrier.second).begin(), columns.at(barrier.second).end(), barrier.first));
 	}
-
-
 	cout << visited.size() << endl;
-	cout << loop<< endl;
+	cout << "loop barriers: " << loops << endl;
 }
