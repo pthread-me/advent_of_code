@@ -1,4 +1,4 @@
-#Execution Times:
+# Execution Times:
 
 ## day1
 | Part | Fastest (s) | Slowest (s) | Average (s) |
