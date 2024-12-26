@@ -2,15 +2,16 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <ostream>
 #include <utility>
 #include <vector>
 #include <string>
 #include <cmath>
 
 //preprocessed data
-#define COLUMNS  10// 131
-#define ROWS 10// 130
-#define INPUT "test.txt"
+#define COLUMNS   131
+#define ROWS  130
+#define INPUT "input.txt"
 //end of preprocessed data
 
 typedef struct Cursor{
@@ -230,7 +231,5 @@ int main(){
 		columns.at(bar.second).erase(find(columns.at(bar.second).begin(), columns.at(bar.second).end(), bar.first));
 	}
 
-
-	cout << visited.size() << endl;
-	cout << loop<< endl;
+	cout << loop<< flush;
 }
