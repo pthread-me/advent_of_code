@@ -38,7 +38,7 @@ echo "## $day
 
 rm temp1.txt temp2.txt t1.txt t2.txt
 
-echo "#Execution Times:
+echo "# Execution Times:
 " > ../$year/README.md
 
 for file in ./*; do
