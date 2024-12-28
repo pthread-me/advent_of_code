@@ -27,10 +27,10 @@ std::pair<int,int> operator-(const std::pair<int, int>& a, const std::pair<int, 
 	return std::pair(a.first - b.first, a.second - b.second);
 }
 
-int main(int argc, char** argv){
+int main(){
 	using namespace std;
 	
-	fstream input(argv[1]);
+	fstream input("input.txt");
 	string line;
 	unordered_map<char, vector<pair<int,int>>> map;
 	vector<pair<int, int>> antenodes;
