@@ -41,7 +41,7 @@ rm temp1.txt temp2.txt t1.txt t2.txt
 echo "# Execution Times:
 " > ../$year/README.md
 
-for file in ./*; do
-	cat $file >> ../$year/README.md
-done
+# Took forever to figure out how to do array shit in this bitch
+files=($(ls | sort -n -t . -k 2))
+cat ${files[@]} >> ../$year/README.md 
 
