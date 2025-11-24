@@ -2,10 +2,10 @@
 #define DEFINITIONS
 
 // C lib and why
-#include <string.h>	// for strtok
+#include <cstring>	// for strtok
 #include <cstdlib>	// for strto<number> 
 #include <cstring>	// tokenizers
-
+#include <climits>  // max ints etc
 
 // Misc
 #include <print>
@@ -27,12 +27,19 @@ typedef long double ld;
 typedef unsigned long long ull;
 
 
+#define MAX_ULL ULLONG_MAX; 
+#define MIN_LL LLONG_MIN;
+#define MAX_LL LLONG_MAX;
+#define MAX_GR 0x9e3779b97f4a7c15ULL // 2^64/golden ratio
+
+
+
 // Concepts
 template<typename T>
 concept signed_long = is_arithmetic_v<T> && is_signed_v<T>;
 
 template<typename T>
-concept unsigned_long = is_arithmetic_v<T> && is_signed_v<T>;
+concept unsigned_long = is_arithmetic_v<T> && is_unsigned_v<T>;
 
 template<typename T>
 concept castable = is_arithmetic_v<T>;
@@ -42,6 +49,9 @@ concept not_castable_string = !is_arithmetic_v<T> && is_same_v<T, string>;
 
 template<typename T>
 concept not_castable = !is_arithmetic_v<T>;
+
+template<typename T>
+concept hashable = is_arithmetic_v<T> ||  same_as<T, string>;
 
 
 

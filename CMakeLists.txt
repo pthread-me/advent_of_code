@@ -9,14 +9,14 @@ set(CMAKE_BUILD_TYPE Debug)
 
 
 set(year 2015)
-set(day 02)
+set(day 03)
 set(dir ${CMAKE_SOURCE_DIR}/src/${year}/${day})
 add_executable(main ${dir}/main.cpp)
 
 find_library(libAoC NAMES AoC PATHS ${CMAKE_SOURCE_DIR}/lib/build REQUIRED NO_DEFAULT_PATH)
-message(STATUS "${libAoC}")
 
 target_link_libraries(main ${libAoC})
 target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/lib/include)
+target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/lib/external)
 
 

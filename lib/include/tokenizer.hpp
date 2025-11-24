@@ -4,7 +4,7 @@
 #include <definitions.hpp>
 
 
-template<unsigned_long T, ull size>
+template<unsigned_long T>
 inline T token_cast(char* s){
   char* str_end;
   ll res = strtoull(s, &str_end, 10);

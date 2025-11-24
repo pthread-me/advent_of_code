@@ -10,4 +10,4 @@ set(sources src/io.cpp)
 add_library(AoC SHARED ${sources})
 
 target_include_directories(AoC PUBLIC include)
-
+target_include_directories(AoC PUBLIC external)
