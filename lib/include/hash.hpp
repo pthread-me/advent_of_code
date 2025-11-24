@@ -25,7 +25,7 @@ class StaticPairHash{
       buffer = (char*) calloc(0, buffer_len);
     }
 
-		size_t operator()(const pair<A, B>& p){
+		size_t operator()(const pair<A, B>& p)const{
       memcpy(buffer, &p.first, sizeof(A));
       memcpy(&(buffer[sizeof(A)]), &p.second, sizeof(B));
       
@@ -38,10 +38,9 @@ class StaticPairHash{
 template<DynamicSized A, DynamicSized B>
 class DynamicPairHash{
 	public:
-
     DynamicPairHash(){}
 
-    size_t operator()(const pair<A, B>& p){
+    size_t operator()(const pair<A, B>& p)const{
       ull buffer_len =  p.first.size() + p.second.size();
       char* buffer = (char*) calloc(0, buffer_len);
 
