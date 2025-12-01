@@ -2,12 +2,14 @@
 #define DEFINITIONS
 
 // C lib and why
+#include <concepts>
 #include <cstring>	// for strtok
 #include <cstdlib>	// for strto<number> 
 #include <cstring>	// tokenizers
 #include <climits>  // max ints etc
 
 // Misc
+#include <expected>
 #include <print>
 #include <fstream>
 #include <string>
@@ -16,10 +18,18 @@
 // Algs and DS
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 #include <array>
+#include <ranges>
+#include <numeric>
+#include <functional>
+#include <algorithm>
+
 
 using namespace std;
+namespace sr = ranges;
+namespace srv = ranges::views;
 
 // Type defines
 typedef long long ll;
@@ -45,14 +55,9 @@ template<typename T>
 concept castable = is_arithmetic_v<T>;
 
 template<typename T>
-concept not_castable_string = !is_arithmetic_v<T> && is_same_v<T, string>;
-
-template<typename T>
-concept not_castable = !is_arithmetic_v<T>;
+concept String = is_same_v<T, string>;
 
 template<typename T>
 concept hashable = is_arithmetic_v<T> ||  same_as<T, string>;
-
-
 
 #endif

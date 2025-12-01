@@ -26,19 +26,16 @@ inline T token_cast(char* s){
   return res;
 }
 
-template<not_castable_string T>
+template<String T>
 inline T token_cast(char* s){return s;}
 
-template<not_castable T>
-inline T token_cast(char* s){
-  print(stderr, "Type T: {} is not castable. Write a custome function to cast char* -> T", typeid(T).name() );
-  throw runtime_error("casting error");
-}
 
 
-template<typename T, ull size> 
-array<T, size> tokenize(const string& line, const string& delim ){
-  array<T, size> res;
+
+template<typename T, ull size=0> 
+vector<T> tokenize(const string& line, const string& delim ){
+  vector<T> res;
+	res.reserve(size);
 
   // +1 since .size() does not account for the \0
   char *s = (char*)calloc(line.size()  +1, sizeof(char));
@@ -49,8 +46,8 @@ array<T, size> tokenize(const string& line, const string& delim ){
   strlcpy(d, delim.c_str(), delim.size()  +1);
   
   token = strtok(s, d);
-  for(ull i=0; i<size; ++i){
-    res[i] = token_cast<T>(token); 
+  while(token!=NULL){
+    res.push_back(token_cast<T>(token)); 
     token = strtok(NULL, d);
   }
   

@@ -2,15 +2,16 @@
 #define HASHERS
 #include <definitions.hpp>
 #include<rapidhash.h>
+#include <utility>
 
 
 
 template<typename T>
 concept StaticSized = is_arithmetic_v<T>;
 
-
 template<typename T>
 concept DynamicSized = is_same_v<T,  string> || is_same_v<T, string_view>;
+
 
 template<StaticSized A, StaticSized B>
 class StaticPairHash{
@@ -38,7 +39,8 @@ class StaticPairHash{
 template<DynamicSized A, DynamicSized B>
 class DynamicPairHash{
 	public:
-    DynamicPairHash(){}
+
+    DynamicPairHash();
 
     size_t operator()(const pair<A, B>& p)const{
       ull buffer_len =  p.first.size() + p.second.size();
@@ -51,6 +53,36 @@ class DynamicPairHash{
     }
  
 };
+
+
+
+// Type aliasing
+template<StaticSized K1, StaticSized K2>
+using static_pair_set = unordered_set<pair<K1, K2>, StaticPairHash<K1, K2>>; 
+
+template<StaticSized K1, StaticSized K2>
+using static_pair_multiset = unordered_multiset<pair<K1, K2>, StaticPairHash<K1, K2>>;
+
+template<StaticSized K1, StaticSized K2, typename E>
+using static_pair_map = unordered_map<pair<K1, K2>, E, StaticPairHash<K1, K2>>;
+
+template<StaticSized K1, StaticSized K2, typename E>
+using static_pair_multimap = unordered_multimap<pair<K1, K2>, E, StaticPairHash<K1, K2>>;
+
+
+
+template<DynamicSized K1, DynamicSized K2>
+using dynamic_pair_set = unordered_set<pair<K1, K2>, DynamicPairHash<K1, K2>>; 
+
+template<DynamicSized K1, DynamicSized K2>
+using dynamic_pair_multiset = unordered_multiset<pair<K1, K2>, DynamicPairHash<K1, K2>>;
+
+template<DynamicSized K1, DynamicSized K2, typename E>
+using dynamic_pair_map = unordered_map<pair<K1, K2>, E, DynamicPairHash<K1, K2>>;
+
+template<DynamicSized K1, DynamicSized K2, typename E>
+using dynamic_pair_multimap = unordered_multimap<pair<K1, K2>, E, DynamicPairHash<K1, K2>>;
+
 
 
 
