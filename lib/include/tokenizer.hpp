@@ -5,7 +5,7 @@
 
 
 template<unsigned_long T>
-inline T token_cast(char* s){
+inline T c_token_cast(char* s){
   char* str_end;
   ll res = strtoull(s, &str_end, 10);
   if(errno == ERANGE){
@@ -16,7 +16,7 @@ inline T token_cast(char* s){
 }
 
 template<signed_long T>
-inline T token_cast(char* s){
+inline T c_token_cast(char* s){
   char* str_end;
   ll res = strtoll(s, &str_end, 10);
   if(errno == ERANGE){
@@ -27,9 +27,16 @@ inline T token_cast(char* s){
 }
 
 template<String T>
-inline T token_cast(char* s){return s;}
+inline T c_token_cast(char* s){return s;}
 
 
+
+template<typename T>
+inline T token_cast(string& line){
+  char *s = (char*)calloc(line.size()  +1, sizeof(char));
+  strlcpy(s, line.c_str(), line.size()    +1);
+	return c_token_cast<T>(s);
+}
 
 
 template<typename T, ull size=0> 
@@ -47,7 +54,7 @@ vector<T> tokenize(const string& line, const string& delim ){
   
   token = strtok(s, d);
   while(token!=NULL){
-    res.push_back(token_cast<T>(token)); 
+    res.push_back(c_token_cast<T>(token)); 
     token = strtok(NULL, d);
   }
   
