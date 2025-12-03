@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_BUILD_TYPE Debug)
 
 # Structure related
-set(year 2025)
-set(day 02)
+set(year 2015)
+set(day 07)
 set(dir ${CMAKE_SOURCE_DIR}/src/${year}/${day})
 add_executable(main ${dir}/main.cpp)
 

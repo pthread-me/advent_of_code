@@ -6,8 +6,9 @@
  * folder 2023 day 01
  * No checks are made to ensure the file exists, use get.sh to create
  */
-ifstream read_input(string year, string day){
-  string file_name("inputs/"+year+"/"+day+"/input.txt");
+ifstream read_input(string year, string day, FileType t){
+  string src = t==INPUT?"input.txt":"sample.txt";
+  string file_name("inputs/"+year+"/"+day+"/"+src);
   ifstream file = ifstream(file_name);
 
   if(!file.is_open()){

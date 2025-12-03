@@ -85,15 +85,5 @@ int main(){
 		uint16_t res = evaluate("a", values, expressions);
 		println("{}: {}", "a", res);
 
-
-    expressions.erase("b");
-    values.clear();
-    values["b"] = res;
-
-
-    res = evaluate("a", values, expressions);
-		println("{}: {}", "a", res);
-
-
 }
 

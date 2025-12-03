@@ -2,6 +2,11 @@
 #define MyIO
 #include <definitions.hpp>
 
-ifstream read_input(string year, string day);
+enum FileType{
+	INPUT = 0,
+	SAMPLE
+};
+
+ifstream read_input(string year, string day, FileType t);
 
 #endif
