@@ -1,8 +1,11 @@
 #include "io.hpp"
 #include <cryptopp/config_int.h>
+#include <cryptopp/filters.h>
 #include <cryptopp/md5.h>
 #include <libapi.hpp>
 #include <cryptopp/cryptlib.h>
+#include <cryptopp/hex.h>
+#include <print>
 #include <string>
 
 
@@ -11,32 +14,38 @@ using namespace CryptoPP;
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 
 
-const char hex_map[] = {'0', '1', '2', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 int main (int argc, char* argv[]){
     
-    ifstream file = read_input("2015", "04", SAMPLE);
+    ifstream file = read_input("2015", "04", INPUT);
     string line;
-    string digest;
+
+
+    CryptoPP::byte digest[Weak1::MD5::DIGESTSIZE];
     getline(file, line); 
+    string hex_digest;
     
     Weak1::MD5 hash;
-    hash.Update((const CryptoPP::byte*)&line[0], line.size());
-    digest.resize(hash.DigestSize());
-    hash.Final((CryptoPP::byte*)&digest[0]);
-    
-    ull i = 1;
-    for(; digest.substr(0, 5) != "00000"; i+=1){
-      string msg = line + to_string(i);
-      hash.Update((const CryptoPP::byte*)&line[0], line.size());
-      digest.resize(hash.DigestSize());
-      hash.Final((CryptoPP::byte*)&digest[0]);
+    CryptoPP::HexEncoder encoder;
 
-      CryptoPP::StringSource;
-      println("{}, {}", msg, digest);
-    }
+    auto get_digest = [&](string msg){
+      encoder.Attach(new StringSink(hex_digest));
+      hash.CalculateDigest(digest, (CryptoPP::byte*)&msg[0] , msg.size());
+      encoder.PutMessageEnd(digest, Weak1::MD5::DIGESTSIZE);
+      println("{}", hex_digest);
+    };
     
-    println("{}", i-1);
+  
+    ull i = 1;
+    while(true){
+      get_digest(line + to_string(i)); 
+      if(hex_digest.substr(0, 6) == "000000"){
+        println("{}", i);
+        break;
+      }
+      i+=1;
+      hex_digest.clear();
+    }
 }
 
 

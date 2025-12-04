@@ -1,3 +1,4 @@
+#pragma once
 #ifndef HASHERS
 #define HASHERS
 #include <definitions.hpp>

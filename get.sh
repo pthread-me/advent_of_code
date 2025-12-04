@@ -38,10 +38,8 @@ fi
 
 
 dir="src/${year}/${day}" 
-src=${dir}/main.cpp
 
 mkdir -p ${dir} 
-touch ${src}
 
 
 input_dir="inputs/${year}/${day}"

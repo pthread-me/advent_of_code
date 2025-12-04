@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_BUILD_TYPE Debug)
 
-set(sources src/io.cpp)
-add_library(AoC SHARED ${sources})
+#set(sources )
+add_library(AoC INTERFACE)
 
-target_include_directories(AoC PUBLIC include)
-target_include_directories(AoC PUBLIC external)
+target_include_directories(AoC INTERFACE include)
+target_include_directories(AoC INTERFACE external)
