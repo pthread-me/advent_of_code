@@ -38,10 +38,11 @@ typedef long double ld;
 typedef unsigned long long ull;
 
 
-#define MAX_ULL ULLONG_MAX; 
-#define MIN_LL LLONG_MIN;
-#define MAX_LL LLONG_MAX;
-#define MAX_GR 0x9e3779b97f4a7c15ULL // 2^64/golden ratio
+const ull MAX_ULL = ULLONG_MAX; 
+const ll MIN_LL = LLONG_MIN;
+const ll MAX_LL = LLONG_MAX;
+const ull MAX_GR  = 0x9e3779b97f4a7c15ULL; // 2^64/golden ratio
+
 
 
 
