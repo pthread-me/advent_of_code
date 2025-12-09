@@ -8,7 +8,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 # Structure related
 set(year 2025)
-set(day 06)
+set(day 08)
 set(dir ${CMAKE_SOURCE_DIR}/src/${year}/${day})
 add_executable(main ${dir}/main.cpp)
 
@@ -23,5 +23,5 @@ target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/lib/external)
 include_directories(main PRIVATE /usr/lib/cryptopp)
 
 
-target_compile_options(main PUBLIC -O3)
+target_compile_options(main PUBLIC -O1)
 
